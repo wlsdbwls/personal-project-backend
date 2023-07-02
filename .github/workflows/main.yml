@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-      - yujin-jin
+      - main
 
 env:
   DOCKER_IMAGE: ghcr.io/${{ github.actor }}/personal-project-backend
