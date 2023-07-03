@@ -24,8 +24,17 @@ public class AccountRole {
     @JoinColumn(name = "account_Id")
     private Account account;
 
+    // 사업자 회원
+    private Long businessNumber;
+
     public AccountRole(Role role, Account account) {
         this.role = role;
         this.account = account;
+    }
+
+    public AccountRole(Role role, Account account, Long businessNumber) {
+        this.role = role;
+        this.account = account;
+        this.businessNumber = businessNumber;
     }
 }

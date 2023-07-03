@@ -1,5 +1,6 @@
 package com.example.demo.account.controller;
 
+import com.example.demo.account.controller.form.business.BusinessAccountRegisterForm;
 import com.example.demo.account.controller.form.normal.NormalAccountRegisterForm;
 import com.example.demo.account.service.AccountService;
 import lombok.RequiredArgsConstructor;
@@ -21,5 +22,11 @@ public class AccountController {
     @PostMapping("/normal-register")
     public Boolean normalAccountRegister (@RequestBody NormalAccountRegisterForm registerForm) {
         return accountService.normalAccountRegister(registerForm.toAccountRegisterRequest());
+    }
+
+    // 사업자 회원
+    @PostMapping("/business-register")
+    public Boolean businessAccountRegister (@RequestBody BusinessAccountRegisterForm requestForm) {
+        return accountService.businessAccountRegister(requestForm.toAccountRegisterRequest());
     }
 }
