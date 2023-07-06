@@ -1,5 +1,6 @@
 package com.example.demo.account.controller;
 
+import com.example.demo.account.controller.form.AccountLoginRequestForm;
 import com.example.demo.account.controller.form.business.BusinessAccountRegisterForm;
 import com.example.demo.account.controller.form.normal.NormalAccountRegisterForm;
 import com.example.demo.account.service.AccountService;
@@ -15,21 +16,31 @@ public class AccountController {
 
     final private AccountService accountService;
 
-    // 개인 회원
+    // 개인 회원 회원 가입
     @PostMapping("/normal-register")
     public Boolean normalAccountRegister (@RequestBody NormalAccountRegisterForm registerForm) {
         return accountService.normalAccountRegister(registerForm.toAccountRegisterRequest());
     }
 
-    // 사업자 회원
+    // 사업자 회원 회원 가입
     @PostMapping("/business-register")
     public Boolean businessAccountRegister (@RequestBody BusinessAccountRegisterForm requestForm) {
         return accountService.businessAccountRegister(requestForm.toAccountRegisterRequest());
     }
 
+    // 이메일 중복체크
     @GetMapping("/check-email/{email}")
-    public Boolean checkEmail(@PathVariable("email") String email) {
+    public Boolean checkEmail (@PathVariable("email") String email) {
 
         return accountService.checkEmailDuplication(email);
+    }
+
+    // 로그인
+    @PostMapping("/login")
+    public String accountLogin (@RequestBody AccountLoginRequestForm accountLoginRequestForm){
+
+        String userToken = accountService.login(accountLoginRequestForm);
+
+        return userToken;
     }
 }

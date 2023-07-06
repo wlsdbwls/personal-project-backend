@@ -1,11 +1,10 @@
 package com.example.demo.account.service;
 
+import com.example.demo.account.controller.form.AccountLoginRequestForm;
 import com.example.demo.account.entity.Account;
 import com.example.demo.account.entity.AccountRole;
 import com.example.demo.account.entity.Role;
-import com.example.demo.account.repository.AccountRepository;
-import com.example.demo.account.repository.AccountRoleRepository;
-import com.example.demo.account.repository.RoleRepository;
+import com.example.demo.account.repository.*;
 import com.example.demo.account.service.request.BusinessAccountRegisterRequest;
 import com.example.demo.account.service.request.NormalAccountRegisterRequest;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -22,6 +22,8 @@ public class AccountServiceImpl implements AccountService{
     final private AccountRepository accountRepository;
     final private RoleRepository roleRepository;
     final private AccountRoleRepository accountRoleRepository;
+    final private UserTokenRepository userTokenRepository = UserTokenRepositoryImpl.getInstance();
+
 
     @Override
     public Boolean normalAccountRegister(NormalAccountRegisterRequest request) {
@@ -81,5 +83,23 @@ public class AccountServiceImpl implements AccountService{
             return false;
         } else {
             return true;
-        }    }
+        }
+    }
+
+    @Override
+    public String login(AccountLoginRequestForm requestForm) {
+        Optional<Account> maybeAccount = accountRepository.findByEmail(requestForm.getEmail());
+
+        if(maybeAccount.isPresent()) {
+            final Account account = maybeAccount.get();
+
+            if(requestForm.getPassword().equals(maybeAccount.get().getPassword())) {
+                final String userToken = UUID.randomUUID().toString();
+                userTokenRepository.save(userToken, account.getId());
+                return userToken;
+            }
+        }
+
+        return "";
+    }
 }
