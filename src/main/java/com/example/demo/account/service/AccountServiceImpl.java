@@ -4,6 +4,7 @@ import com.example.demo.account.controller.form.AccountLoginRequestForm;
 import com.example.demo.account.entity.Account;
 import com.example.demo.account.entity.AccountRole;
 import com.example.demo.account.entity.Role;
+import com.example.demo.account.entity.RoleType;
 import com.example.demo.account.repository.*;
 import com.example.demo.account.service.request.BusinessAccountRegisterRequest;
 import com.example.demo.account.service.request.NormalAccountRegisterRequest;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.example.demo.account.entity.RoleType.BUSINESS;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -23,7 +26,6 @@ public class AccountServiceImpl implements AccountService{
     final private RoleRepository roleRepository;
     final private AccountRoleRepository accountRoleRepository;
     final private UserTokenRepository userTokenRepository = UserTokenRepositoryImpl.getInstance();
-
 
     @Override
     public Boolean normalAccountRegister(NormalAccountRegisterRequest request) {
@@ -101,5 +103,46 @@ public class AccountServiceImpl implements AccountService{
         }
 
         return "";
+    }
+
+    @Override
+    public RoleType lookup(String userToken) {
+        final Long accountId = userTokenRepository.findAccountIdByUserToken(userToken);
+
+        final Optional<Account> maybeAccount = accountRepository.findById(accountId);
+
+        if (maybeAccount.isEmpty()) {
+            return null;
+        }
+
+        final Account account = maybeAccount.get();
+        final Role role = accountRoleRepository.findRoleByAccount(account);
+
+        log.info("roleType: " + role.getRoleType());
+        return role.getRoleType();
+    }
+
+    @Override
+    public Long findAccountId(String userToken) {
+        final Long accountId = userTokenRepository.findAccountIdByUserToken(userToken);
+
+        log.info("accountId: " + accountId);
+
+        return accountId;
+    }
+
+    @Override
+    public Boolean businessCheck(Long accountId) {
+        Optional<AccountRole> maybeAccountRole =accountRoleRepository.findByAccountIdWithRole(accountId);
+
+        log.info("가져온 어카운트 롤 ID: "+String.valueOf(maybeAccountRole.get().getId()));
+        log.info("어카운트 롤의 롤타입: "+String.valueOf(maybeAccountRole.get().getRole().getRoleType()));
+
+        Role role= maybeAccountRole.get().getRole();
+        if (role.getRoleType().equals(BUSINESS)){
+            return true;
+        }
+
+        return false;
     }
 }

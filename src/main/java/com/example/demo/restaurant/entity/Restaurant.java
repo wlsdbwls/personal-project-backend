@@ -43,4 +43,9 @@ public class Restaurant {
         this.restaurantName = restaurantName;
         this.restaurantInfo = restaurantInfo;
     }
+
+    public void setRestaurantImages(RestaurantImages restaurantImg) {
+        restaurantImg.setRestaurant(this);
+        restaurantImagesList.add(restaurantImg);
+    }
 }
