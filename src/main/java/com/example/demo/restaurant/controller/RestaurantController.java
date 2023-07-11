@@ -3,6 +3,7 @@ package com.example.demo.restaurant.controller;
 import com.example.demo.account.entity.RoleType;
 import com.example.demo.account.service.AccountService;
 import com.example.demo.restaurant.controller.form.RestaurantListResponseForm;
+import com.example.demo.restaurant.controller.form.RestaurantReadResponseForm;
 import com.example.demo.restaurant.controller.form.RestaurantRegisterForm;
 import com.example.demo.restaurant.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
@@ -47,5 +48,13 @@ public class RestaurantController {
         }
 
         return restaurantService.register(registerForm.toRestaurantRegisterRequest(), restaurantImg);
+    }
+
+    // 음식점 상세 페이지
+    @GetMapping("/{id}")
+    public RestaurantReadResponseForm readRestaurant(@PathVariable("id") Long id) {
+        log.info("readRestaurant()");
+
+        return restaurantService.read(id);
     }
 }
