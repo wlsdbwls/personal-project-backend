@@ -5,6 +5,7 @@ import com.example.demo.restaurant.controller.form.*;
 import com.example.demo.restaurant.controller.form.business.BusinessRestaurantListRequestForm;
 import com.example.demo.restaurant.controller.form.business.BusinessRestaurantListResponseForm;
 import com.example.demo.restaurant.controller.form.business.BusinessRestaurantReadResponseForm;
+import com.example.demo.restaurant.entity.Restaurant;
 import com.example.demo.restaurant.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -75,5 +76,14 @@ public class RestaurantController {
         log.info("readBusinessRestaurant()");
 
         return restaurantService.businessRead(id);
+    }
+
+    // 사업자 회원 - 음식점 수정
+    @PutMapping("/{id}")
+    public Restaurant modifyRestaurant (@PathVariable("id") Long id,
+                                        @RequestBody RestaurantModifyForm modifyForm) {
+        log.info("modifyProduct()");
+
+        return restaurantService.modify(id, modifyForm.toRestaurantModifyRequest());
     }
 }

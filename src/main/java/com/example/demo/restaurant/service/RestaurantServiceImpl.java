@@ -12,6 +12,7 @@ import com.example.demo.restaurant.entity.Restaurant;
 import com.example.demo.restaurant.entity.RestaurantImages;
 import com.example.demo.restaurant.repository.RestaurantImagesRepository;
 import com.example.demo.restaurant.repository.RestaurantRepository;
+import com.example.demo.restaurant.service.request.RestaurantModifyRequest;
 import com.example.demo.restaurant.service.request.RestaurantRegisterRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -141,5 +142,21 @@ public class RestaurantServiceImpl implements RestaurantService {
         log.info("productImagesList: " + restaurantImagesList);
 
         return new BusinessRestaurantReadResponseForm(restaurant, restaurantImagesList);
+    }
+
+    @Override
+    public Restaurant modify(Long id, RestaurantModifyRequest restaurantModifyRequest) {
+        Optional<Restaurant> maybeRestaurant = restaurantRepository.findById(id);
+
+        if (maybeRestaurant.isEmpty()) {
+            log.info("존재하지 않는 맛집입니다.");
+            return null;
+        }
+
+        Restaurant restaurant = maybeRestaurant.get();
+        restaurant.setRestaurantName(restaurantModifyRequest.getRestaurantName());
+        restaurant.setRestaurantInfo(restaurantModifyRequest.getRestaurantInfo());
+
+        return restaurantRepository.save(restaurant);
     }
 }
