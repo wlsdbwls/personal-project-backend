@@ -21,4 +21,5 @@ public interface RestaurantService {
     @Transactional
     BusinessRestaurantReadResponseForm businessRead(Long id);
     Restaurant modify(Long id, RestaurantModifyRequest restaurantModifyRequest);
+    void delete(Long id);
 }

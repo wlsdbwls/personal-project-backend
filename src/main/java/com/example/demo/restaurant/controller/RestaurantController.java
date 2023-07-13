@@ -78,12 +78,19 @@ public class RestaurantController {
         return restaurantService.businessRead(id);
     }
 
-    // 사업자 회원 - 음식점 수정
+    // 사업자 회원 - 맛집 수정
     @PutMapping("/{id}")
     public Restaurant modifyRestaurant (@PathVariable("id") Long id,
                                         @RequestBody RestaurantModifyForm modifyForm) {
         log.info("modifyProduct()");
 
         return restaurantService.modify(id, modifyForm.toRestaurantModifyRequest());
+    }
+
+    // 사업자 회원 - 맛집 삭제
+    @DeleteMapping("/{id}")
+    public void deleteRestaurant (@PathVariable("id") Long id) {
+        log.info("deleteRestaurant()");
+        restaurantService.delete(id);
     }
 }
