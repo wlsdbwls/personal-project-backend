@@ -106,10 +106,8 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
-    public RoleType lookup(String userToken) {
-        final Long accountId = userTokenRepository.findAccountIdByUserToken(userToken);
-
-        final Optional<Account> maybeAccount = accountRepository.findById(accountId);
+    public RoleType lookup(String email) {
+        final Optional<Account> maybeAccount = accountRepository.findByEmail(email);
 
         if (maybeAccount.isEmpty()) {
             return null;

@@ -1,12 +1,9 @@
 package com.example.demo.restaurant.controller.form;
 
-import com.example.demo.restaurant.entity.Restaurant;
 import com.example.demo.restaurant.service.request.RestaurantModifyRequest;
-import com.example.demo.restaurant.service.request.RestaurantRegisterRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 @NoArgsConstructor

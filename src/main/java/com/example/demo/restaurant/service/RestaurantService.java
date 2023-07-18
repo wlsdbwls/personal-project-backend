@@ -8,13 +8,11 @@ import com.example.demo.restaurant.entity.Restaurant;
 import com.example.demo.restaurant.service.request.RestaurantModifyRequest;
 import com.example.demo.restaurant.service.request.RestaurantRegisterRequest;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface RestaurantService {
     List<RestaurantListResponseForm> list();
-    Boolean register(RestaurantRegisterRequest restaurantRegisterRequest, List<MultipartFile> restaurantImg);
     @Transactional
     RestaurantReadResponseForm read(Long id);
     List<BusinessRestaurantListResponseForm> businessRegisterRestaurantList(Long accountId);
@@ -22,4 +20,5 @@ public interface RestaurantService {
     BusinessRestaurantReadResponseForm businessRead(Long id);
     Restaurant modify(Long id, RestaurantModifyRequest restaurantModifyRequest);
     void delete(Long id);
+    Boolean register(RestaurantRegisterRequest restaurantRegisterRequest, List<String> imageUrls);
 }
