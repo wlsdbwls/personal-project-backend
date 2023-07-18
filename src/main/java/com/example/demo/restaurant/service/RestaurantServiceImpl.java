@@ -123,7 +123,6 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public Boolean register(RestaurantRegisterRequest request, List<String> restaurantImageUrls) {
-
         String userToken = request.getUserToken();
         Long accountId = userTokenRepository.findAccountIdByUserToken(userToken);
         Optional<Account> maybeAccount = accountRepository.findById(accountId);
@@ -132,21 +131,23 @@ public class RestaurantServiceImpl implements RestaurantService {
             Account account = maybeAccount.get();
 
             Restaurant restaurant = request.toRestaurant();
-            final List<RestaurantImages> restaurantImagesList = new ArrayList<>();
-
             restaurant.setAccount(account);
+            restaurantRepository.save(restaurant); // 레스토랑 엔티티 저장
+
+            final List<RestaurantImages> restaurantImagesList = new ArrayList<>();
 
             for (String imageUrl : restaurantImageUrls) {
                 RestaurantImages restaurantImage = new RestaurantImages(imageUrl);
+                restaurantImage.setRestaurant(restaurant); // 레스토랑 엔티티와의 관계 설정
                 restaurantImagesList.add(restaurantImage);
             }
 
-            restaurantRepository.save(restaurant);
-            restaurantImagesRepository.saveAll(restaurantImagesList);
+            restaurantImagesRepository.saveAll(restaurantImagesList); // 레스토랑 이미지 엔티티들 저장
 
             return true;
         }
 
         return false;
     }
+
 }
