@@ -20,6 +20,6 @@ public interface RestaurantService {
     BusinessRestaurantReadResponseForm businessRead(Long id);
     void delete(Long id);
     Boolean register(RestaurantRegisterRequest restaurantRegisterRequest, List<String> imageUrls);
-
     Restaurant modify(Long id, RestaurantModifyForm modifyForm);
+    Long findRestaurantId(String restaurantName);
 }

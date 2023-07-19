@@ -117,6 +117,16 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    public Long findRestaurantId(String restaurantName) {
+        final Optional<Restaurant> maybeRestaurant = restaurantRepository.findByRestaurantName(restaurantName);
+        if (maybeRestaurant.isPresent()) {
+            return maybeRestaurant.get().getId();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
     public void delete(Long id) {
         restaurantImagesRepository.deleteAllByRestaurantId(id);
         restaurantRepository.deleteById(id);

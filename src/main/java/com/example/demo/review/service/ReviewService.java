@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface ReviewService {
     Boolean register(ReviewRegisterRequest reviewRegisterRequest);
-    List<ReviewListResponseForm> list();
+    List<ReviewListResponseForm> list(Long restaurantId);
 }

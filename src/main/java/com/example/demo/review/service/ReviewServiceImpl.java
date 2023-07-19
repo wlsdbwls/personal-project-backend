@@ -62,9 +62,9 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public List<ReviewListResponseForm> list() {
+    public List<ReviewListResponseForm> list(Long restaurantId) {
         List<ReviewListResponseForm> tmpList = new ArrayList<>();
-        List<Review> reviews = reviewRepository.findAll();
+        List<Review> reviews = reviewRepository.findAllByRestaurantId(restaurantId);
 
         for (Review review : reviews) {
 //            List<RestaurantImages> maybeImages = restaurantImagesRepository.findByRestaurantId(restaurant.getId());
