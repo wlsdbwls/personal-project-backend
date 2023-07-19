@@ -5,6 +5,7 @@ import com.example.demo.account.repository.AccountRepository;
 import com.example.demo.account.repository.UserTokenRepository;
 import com.example.demo.account.repository.UserTokenRepositoryImpl;
 import com.example.demo.restaurant.controller.form.RestaurantListResponseForm;
+import com.example.demo.restaurant.controller.form.RestaurantModifyForm;
 import com.example.demo.restaurant.controller.form.RestaurantReadResponseForm;
 import com.example.demo.restaurant.controller.form.business.BusinessRestaurantListResponseForm;
 import com.example.demo.restaurant.controller.form.business.BusinessRestaurantReadResponseForm;
@@ -12,7 +13,6 @@ import com.example.demo.restaurant.entity.Restaurant;
 import com.example.demo.restaurant.entity.RestaurantImages;
 import com.example.demo.restaurant.repository.RestaurantImagesRepository;
 import com.example.demo.restaurant.repository.RestaurantRepository;
-import com.example.demo.restaurant.service.request.RestaurantModifyRequest;
 import com.example.demo.restaurant.service.request.RestaurantRegisterRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -101,7 +101,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public Restaurant modify(Long id, RestaurantModifyRequest restaurantModifyRequest) {
+    public Restaurant modify(Long id, RestaurantModifyForm modifyForm) {
         Optional<Restaurant> maybeRestaurant = restaurantRepository.findById(id);
 
         if (maybeRestaurant.isEmpty()) {
@@ -110,8 +110,8 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
 
         Restaurant restaurant = maybeRestaurant.get();
-        restaurant.setRestaurantName(restaurantModifyRequest.getRestaurantName());
-        restaurant.setRestaurantInfo(restaurantModifyRequest.getRestaurantInfo());
+        restaurant.setRestaurantName(modifyForm.getRestaurantName());
+        restaurant.setRestaurantInfo(modifyForm.getRestaurantInfo());
 
         return restaurantRepository.save(restaurant);
     }
@@ -151,4 +151,6 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         return false;
     }
+
+
 }

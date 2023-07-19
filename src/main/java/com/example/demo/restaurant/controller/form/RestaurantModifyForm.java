@@ -1,6 +1,6 @@
 package com.example.demo.restaurant.controller.form;
 
-import com.example.demo.restaurant.service.request.RestaurantModifyRequest;
+import com.example.demo.restaurant.entity.Restaurant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,8 +14,8 @@ public class RestaurantModifyForm {
     private String restaurantInfo;
     private String userToken;
 
-    public RestaurantModifyRequest toRestaurantModifyRequest() {
+    public Restaurant toRestaurant() {
 
-        return new RestaurantModifyRequest(restaurantName, restaurantInfo, userToken);
+        return new Restaurant(restaurantName, restaurantInfo);
     }
 }

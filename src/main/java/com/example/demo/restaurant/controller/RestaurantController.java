@@ -80,7 +80,7 @@ public class RestaurantController {
                                         @RequestBody RestaurantModifyForm modifyForm) {
         log.info("modifyProduct()");
 
-        return restaurantService.modify(id, modifyForm.toRestaurantModifyRequest());
+        return restaurantService.modify(id, modifyForm);
     }
 
     // 사업자 회원 - 맛집 삭제

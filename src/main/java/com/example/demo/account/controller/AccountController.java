@@ -64,7 +64,7 @@ public class AccountController {
     }
 
     // 이메일 반환
-    @PostMapping("/returnEmail")
+    @PostMapping("/return-email")
     public String returnEmail(@RequestBody ReturnEmailRequestForm requestForm) {
         log.info("returnEmail()");
 
