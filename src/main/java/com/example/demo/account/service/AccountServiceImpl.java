@@ -143,4 +143,18 @@ public class AccountServiceImpl implements AccountService{
 
         return false;
     }
+
+    @Override
+    public String returnEmail(String userToken) {
+        Long accountId = userTokenRepository.findAccountIdByUserToken(userToken);
+
+        Optional<Account> maybeAccount = accountRepository.findById(accountId);
+        if (maybeAccount.isPresent()) {
+            String returnEmail = maybeAccount.get().getEmail();
+
+            return returnEmail;
+        }
+
+        return "";
+    }
 }
