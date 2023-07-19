@@ -74,9 +74,11 @@ public class RestaurantServiceImpl implements RestaurantService {
         for (Restaurant restaurant: restaurantList ){
             List<RestaurantImages> maybeImages = restaurantImagesRepository.findByRestaurantId(restaurant.getId());
 
-            BusinessRestaurantListResponseForm responseForm = new BusinessRestaurantListResponseForm(
-                    restaurant, maybeImages.get(0).getImageResourcePath());
-            businessRegisterRestaurantList.add(responseForm);
+            if (!maybeImages.isEmpty()) {
+                BusinessRestaurantListResponseForm responseForm = new BusinessRestaurantListResponseForm(
+                        restaurant, maybeImages.get(0).getImageResourcePath());
+                businessRegisterRestaurantList.add(responseForm);
+            }
         }
         return businessRegisterRestaurantList;
     }
@@ -149,5 +151,4 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         return false;
     }
-
 }
