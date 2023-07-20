@@ -17,7 +17,11 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Setter
     private Float ratings;
+
+    @Setter
     private String comment;
 
 //    @JsonIgnore

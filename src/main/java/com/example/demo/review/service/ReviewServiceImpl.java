@@ -8,6 +8,7 @@ import com.example.demo.restaurant.controller.form.RestaurantListResponseForm;
 import com.example.demo.restaurant.entity.Restaurant;
 import com.example.demo.restaurant.entity.RestaurantImages;
 import com.example.demo.restaurant.repository.RestaurantRepository;
+import com.example.demo.review.controller.form.ReviewModifyForm;
 import com.example.demo.review.controller.form.response.ReviewListResponseForm;
 import com.example.demo.review.entity.Review;
 import com.example.demo.review.repository.ReviewRepository;
@@ -23,7 +24,7 @@ import java.util.Optional;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class ReviewServiceImpl implements ReviewService{
+public class ReviewServiceImpl implements ReviewService {
 
     final private UserTokenRepository userTokenRepository = UserTokenRepositoryImpl.getInstance();
     final private AccountRepository accountRepository;
@@ -75,5 +76,31 @@ public class ReviewServiceImpl implements ReviewService{
         }
 
         return tmpList;
+    }
+
+    @Override
+    public Review modify(Long id, ReviewModifyForm modifyForm) {
+
+        final String userToken = modifyForm.getUserToken();
+        final Long accountId = userTokenRepository.findAccountIdByUserToken(userToken);
+
+        Optional<Account> maybeAccount = accountRepository.findById(accountId);
+
+        if (maybeAccount.isPresent()) {
+            Optional<Review> maybeReview = reviewRepository.findById(id);
+
+            if (maybeReview.isEmpty()) {
+                log.info("존재하지 않는 리뷰입니다.");
+                return null;
+            }
+
+            Review review = maybeReview.get();
+            review.setRatings(modifyForm.getRatings());
+            review.setComment(modifyForm.getComment());
+
+            return reviewRepository.save(review);
+        }
+
+        return null;
     }
 }
