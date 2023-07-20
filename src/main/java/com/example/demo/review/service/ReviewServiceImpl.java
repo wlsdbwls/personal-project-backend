@@ -5,14 +5,17 @@ import com.example.demo.account.repository.AccountRepository;
 import com.example.demo.account.repository.UserTokenRepository;
 import com.example.demo.account.repository.UserTokenRepositoryImpl;
 import com.example.demo.restaurant.controller.form.RestaurantListResponseForm;
+import com.example.demo.restaurant.controller.form.RestaurantReadResponseForm;
 import com.example.demo.restaurant.entity.Restaurant;
 import com.example.demo.restaurant.entity.RestaurantImages;
 import com.example.demo.restaurant.repository.RestaurantRepository;
 import com.example.demo.review.controller.form.ReviewModifyForm;
 import com.example.demo.review.controller.form.response.ReviewListResponseForm;
+import com.example.demo.review.controller.form.response.ReviewReadResponseForm;
 import com.example.demo.review.entity.Review;
 import com.example.demo.review.repository.ReviewRepository;
 import com.example.demo.review.service.request.ReviewRegisterRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -102,5 +105,23 @@ public class ReviewServiceImpl implements ReviewService {
         }
 
         return null;
+    }
+
+    @Transactional
+    @Override
+    public ReviewReadResponseForm read(Long id) {
+        final Optional<Review> maybeReview = reviewRepository.findById(id);
+
+        if (maybeReview.isEmpty()) {
+            log.info("후기가 존재하지 않습니다.");
+            return null;
+        }
+        final Review review = maybeReview.get();
+        log.info("review:" + review);
+
+//        final List<RestaurantImages> restaurantImagesList = restaurantImagesRepository.findByRestaurantId(review.getId());
+//        log.info("restaurantImagesList: " + restaurantImagesList);
+
+        return new ReviewReadResponseForm(review);
     }
 }
