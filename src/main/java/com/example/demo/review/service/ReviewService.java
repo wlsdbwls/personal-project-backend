@@ -14,4 +14,5 @@ public interface ReviewService {
     List<ReviewListResponseForm> list(Long restaurantId);
     Review modify(Long id, ReviewModifyForm modifyForm);
     ReviewReadResponseForm read(Long id);
+    void delete(Long id);
 }

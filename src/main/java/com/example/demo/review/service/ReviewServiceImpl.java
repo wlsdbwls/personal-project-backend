@@ -110,6 +110,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     @Override
     public ReviewReadResponseForm read(Long id) {
+
         final Optional<Review> maybeReview = reviewRepository.findById(id);
 
         if (maybeReview.isEmpty()) {
@@ -123,5 +124,11 @@ public class ReviewServiceImpl implements ReviewService {
 //        log.info("restaurantImagesList: " + restaurantImagesList);
 
         return new ReviewReadResponseForm(review);
+    }
+
+    @Override
+    public void delete(Long id) {
+//        restaurantImagesRepository.deleteAllByRestaurantId(id);
+        reviewRepository.deleteById(id);
     }
 }
