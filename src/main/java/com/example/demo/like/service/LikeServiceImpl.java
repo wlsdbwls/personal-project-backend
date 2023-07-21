@@ -41,6 +41,10 @@ public class LikeServiceImpl implements LikeService{
             if (maybeRestaurant.isPresent()) {
                 Restaurant restaurant = maybeRestaurant.get();
 
+                if (isAlreadyLiked(account.getId(), restaurant.getId())) {
+                    return false;
+                }
+
                 LikeEntity like = likeRestaurantForm.toLike(account, restaurant);
                 likeRepository.save(like);
 
@@ -49,5 +53,11 @@ public class LikeServiceImpl implements LikeService{
         }
 
         return false;
+    }
+
+    // 중복 찜 체크하기
+    private boolean isAlreadyLiked(Long accountId, Long restaurantId) {
+        LikeEntity existingLike = likeRepository.findByAccountIdAndRestaurantId(accountId, restaurantId);
+        return existingLike != null;
     }
 }

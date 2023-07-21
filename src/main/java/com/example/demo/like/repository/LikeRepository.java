@@ -4,4 +4,5 @@ import com.example.demo.like.entity.LikeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LikeRepository extends JpaRepository<LikeEntity, Long> {
+    LikeEntity findByAccountIdAndRestaurantId(Long accountId, Long restaurantId);
 }
