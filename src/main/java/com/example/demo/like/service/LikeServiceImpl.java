@@ -4,11 +4,9 @@ import com.example.demo.account.entity.Account;
 import com.example.demo.account.repository.AccountRepository;
 import com.example.demo.account.repository.UserTokenRepository;
 import com.example.demo.account.repository.UserTokenRepositoryImpl;
-import com.example.demo.like.controller.form.LikeDeleteForm;
 import com.example.demo.like.controller.form.LikeRestaurantForm;
 import com.example.demo.like.entity.LikeEntity;
 import com.example.demo.like.repository.LikeRepository;
-import com.example.demo.like.service.request.LikeRestaurantRequest;
 import com.example.demo.restaurant.entity.Restaurant;
 import com.example.demo.restaurant.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
@@ -57,11 +55,9 @@ public class LikeServiceImpl implements LikeService{
     }
 
     @Override
-    public void delete(Long restaurantId, LikeDeleteForm likeDeleteForm) {
+    public void delete(Long restaurantId, String userToken) {
 
-        String userToken = likeDeleteForm.getUserToken();
         Long accountId = userTokenRepository.findAccountIdByUserToken(userToken);
-
         Optional<Account> maybeAccount = accountRepository.findById(accountId);
 
         if (maybeAccount.isPresent()) {
