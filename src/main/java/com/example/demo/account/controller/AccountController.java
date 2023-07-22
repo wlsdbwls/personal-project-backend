@@ -1,6 +1,7 @@
 package com.example.demo.account.controller;
 
 import com.example.demo.account.controller.form.AccountLoginRequestForm;
+import com.example.demo.account.controller.form.ReturnAccountIdRequestForm;
 import com.example.demo.account.controller.form.ReturnEmailRequestForm;
 import com.example.demo.account.controller.form.business.BusinessAccountRegisterForm;
 import com.example.demo.account.controller.form.business.BusinessCheckRequestForm;
@@ -73,5 +74,17 @@ public class AccountController {
         log.info("returnEmail: " + returnEmail);
 
         return returnEmail;
+    }
+
+    // accountId 반환
+    @PostMapping("/return-accountId")
+    public Long returnAccountId(@RequestBody ReturnAccountIdRequestForm requestForm) {
+        log.info("returnAccountId()");
+
+        String userToken = requestForm.getUserToken();
+        Long returnAccountId = accountService.findAccountId(userToken);
+        log.info("returnEmail: " + returnAccountId);
+
+        return returnAccountId;
     }
 }
