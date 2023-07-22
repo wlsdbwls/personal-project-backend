@@ -1,13 +1,14 @@
 package com.example.demo.like.controller;
 
+import com.example.demo.account.service.AccountService;
+import com.example.demo.like.controller.form.LikeDeleteForm;
 import com.example.demo.like.controller.form.LikeRestaurantForm;
+import com.example.demo.like.entity.LikeEntity;
 import com.example.demo.like.service.LikeService;
+import com.example.demo.restaurant.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -23,5 +24,14 @@ public class LikeController {
         log.info("likeRestaurant()");
 
         return likeService.likeRestaurant(likeRestaurantForm);
+    }
+
+    // 찜 해제
+    @DeleteMapping("/{id}")
+    public void deleteLikedRestaurant (@PathVariable("id") Long restaurantId,
+                                       @RequestBody LikeDeleteForm likeDeleteForm) {
+        log.info("deleteLikedRestaurant()");
+
+        likeService.delete(restaurantId, likeDeleteForm);
     }
 }

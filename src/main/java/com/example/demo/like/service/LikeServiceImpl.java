@@ -4,6 +4,7 @@ import com.example.demo.account.entity.Account;
 import com.example.demo.account.repository.AccountRepository;
 import com.example.demo.account.repository.UserTokenRepository;
 import com.example.demo.account.repository.UserTokenRepositoryImpl;
+import com.example.demo.like.controller.form.LikeDeleteForm;
 import com.example.demo.like.controller.form.LikeRestaurantForm;
 import com.example.demo.like.entity.LikeEntity;
 import com.example.demo.like.repository.LikeRepository;
@@ -55,9 +56,26 @@ public class LikeServiceImpl implements LikeService{
         return false;
     }
 
+    @Override
+    public void delete(Long restaurantId, LikeDeleteForm likeDeleteForm) {
+
+        String userToken = likeDeleteForm.getUserToken();
+        Long accountId = userTokenRepository.findAccountIdByUserToken(userToken);
+
+        Optional<Account> maybeAccount = accountRepository.findById(accountId);
+
+        if (maybeAccount.isPresent()) {
+            Optional<LikeEntity> maybeLike = likeRepository.findByAccountIdAndRestaurantId(accountId, restaurantId);
+
+            if (maybeLike.isPresent()) {
+                likeRepository.deleteById(maybeLike.get().getId());
+            }
+        }
+    }
+
     // 중복 찜 체크하기
     private boolean isAlreadyLiked(Long accountId, Long restaurantId) {
-        LikeEntity existingLike = likeRepository.findByAccountIdAndRestaurantId(accountId, restaurantId);
-        return existingLike != null;
+        Optional<LikeEntity> maybeLike = likeRepository.findByAccountIdAndRestaurantId(accountId, restaurantId);
+        return maybeLike.isPresent();
     }
 }
