@@ -7,6 +7,7 @@ import com.example.demo.restaurant.entity.Restaurant;
 import com.example.demo.restaurant.service.RestaurantService;
 import com.example.demo.review.controller.form.ReviewModifyForm;
 import com.example.demo.review.controller.form.ReviewRegisterForm;
+import com.example.demo.review.controller.form.request.ReviewAverageRatingsForm;
 import com.example.demo.review.controller.form.request.ReviewListRequestForm;
 import com.example.demo.review.controller.form.response.ReviewListResponseForm;
 import com.example.demo.review.controller.form.response.ReviewReadResponseForm;
@@ -71,5 +72,15 @@ public class ReviewController {
         log.info("deleteReview()");
 
         reviewService.delete(id);
+    }
+
+    // 평점 반환하기
+    @PostMapping("/average-ratings")
+    public Float averageRatings (@RequestBody ReviewAverageRatingsForm averageRatingsForm) {
+        log.info("averageRatings()");
+
+        final Float averageRatings = reviewService.averageRatings(averageRatingsForm);
+
+        return averageRatings;
     }
 }
