@@ -4,6 +4,7 @@ import com.example.demo.account.entity.Account;
 import com.example.demo.account.repository.AccountRepository;
 import com.example.demo.account.repository.UserTokenRepository;
 import com.example.demo.account.repository.UserTokenRepositoryImpl;
+import com.example.demo.like.controller.form.LikeRestaurantCountForm;
 import com.example.demo.like.controller.form.LikeRestaurantForm;
 import com.example.demo.like.entity.LikeEntity;
 import com.example.demo.like.repository.LikeRepository;
@@ -67,6 +68,11 @@ public class LikeServiceImpl implements LikeService{
                 likeRepository.deleteById(maybeLike.get().getId());
             }
         }
+    }
+
+    public Integer likeRestaurantCount(LikeRestaurantCountForm countForm) {
+        Long restaurantId = countForm.getRestaurantId();
+        return likeRepository.countLikesByRestaurantId(restaurantId);
     }
 
     // 중복 찜 체크하기

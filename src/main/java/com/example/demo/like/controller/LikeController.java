@@ -1,5 +1,6 @@
 package com.example.demo.like.controller;
 
+import com.example.demo.like.controller.form.LikeRestaurantCountForm;
 import com.example.demo.like.controller.form.LikeRestaurantForm;
 import com.example.demo.like.service.LikeService;
 import lombok.RequiredArgsConstructor;
@@ -29,5 +30,15 @@ public class LikeController {
         log.info("deleteLikedRestaurant()");
 
         likeService.delete(id, userToken);
+    }
+
+    // 찜 숫자 반환
+    @PostMapping("/restaurant-count")
+    public Integer countLikedRestaurant (@RequestBody LikeRestaurantCountForm countForm) {
+        log.info("countLikedRestaurant()");
+
+        final Integer likeCount = likeService.likeRestaurantCount(countForm);
+
+        return likeCount;
     }
 }
