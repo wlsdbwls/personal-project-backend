@@ -87,4 +87,14 @@ public class AccountController {
 
         return returnAccountId;
     }
+
+    // 이메일 인증
+    @PostMapping("mail-confirm")
+    @ResponseBody
+    String mailConfirm(@RequestParam("email") String email) throws Exception {
+
+        String code = accountService.sendSimpleMessage(email);
+        System.out.println("인증코드 : " + code);
+        return code;
+    }
 }
