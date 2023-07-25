@@ -22,13 +22,13 @@ public class Account {
     private String nickName;
     private String address;
 
-    public Account(String email, String userName, String gender, Integer birth, String nickName, String address, String password) {
+    public Account(String email, String password, String userName, String gender, Integer birth, String nickName, String address) {
         this.email = email;
+        this.password = password;
         this.userName = userName;
         this.gender = gender;
         this.birth = birth;
         this.nickName = nickName;
         this.address = address;
-        this.password = password;
     }
 }
