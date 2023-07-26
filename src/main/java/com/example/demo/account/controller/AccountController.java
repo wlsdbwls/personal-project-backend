@@ -140,4 +140,12 @@ public class AccountController {
 
         return accountService.modifyPassword(id, modifyForm);
     }
+
+    // 회원 탈퇴
+    @DeleteMapping("/{id}")
+    public void deleteAccount (@PathVariable("id") Long id) {
+        log.info("deleteAccount()");
+
+        accountService.delete(id);
+    }
 }
