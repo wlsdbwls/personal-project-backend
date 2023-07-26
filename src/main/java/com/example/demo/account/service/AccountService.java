@@ -1,6 +1,9 @@
 package com.example.demo.account.service;
 
 import com.example.demo.account.controller.form.AccountLoginRequestForm;
+import com.example.demo.account.controller.form.AccountReadRequestForm;
+import com.example.demo.account.controller.form.AccountReadResponseForm;
+import com.example.demo.account.entity.Account;
 import com.example.demo.account.entity.RoleType;
 import com.example.demo.account.service.request.BusinessAccountRegisterRequest;
 import com.example.demo.account.service.request.NormalAccountRegisterRequest;
@@ -23,4 +26,5 @@ public interface AccountService {
     // 랜덤 인증 코드 전송
     String createKey();
     String sendSimpleMessage(String email) throws MessagingException, UnsupportedEncodingException;
+    Account read(AccountReadRequestForm requestForm);
 }

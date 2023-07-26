@@ -1,12 +1,13 @@
 package com.example.demo.account.controller;
 
-import com.example.demo.account.controller.form.AccountLoginRequestForm;
-import com.example.demo.account.controller.form.ReturnAccountIdRequestForm;
-import com.example.demo.account.controller.form.ReturnEmailRequestForm;
+import com.example.demo.account.controller.form.*;
 import com.example.demo.account.controller.form.business.BusinessAccountRegisterForm;
 import com.example.demo.account.controller.form.business.BusinessCheckRequestForm;
 import com.example.demo.account.controller.form.normal.NormalAccountRegisterForm;
+import com.example.demo.account.entity.Account;
 import com.example.demo.account.service.AccountService;
+import com.example.demo.restaurant.controller.form.RestaurantReadResponseForm;
+import com.example.demo.restaurant.controller.form.business.BusinessRestaurantReadResponseForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -89,12 +90,20 @@ public class AccountController {
     }
 
     // 이메일 인증
-    @PostMapping("mail-confirm")
     @ResponseBody
-    String mailConfirm(@RequestParam("email") String email) throws Exception {
+    @PostMapping("mail-confirm/{email}")
+    String mailConfirm(@PathVariable("email") String email) throws Exception {
 
         String code = accountService.sendSimpleMessage(email);
         System.out.println("인증코드 : " + code);
         return code;
+    }
+
+    // 회원 정보
+    @PostMapping("/give-info")
+    public Account readAccount (@RequestBody AccountReadRequestForm requestForm) {
+        log.info("readAccount()");
+
+        return accountService.read(requestForm);
     }
 }

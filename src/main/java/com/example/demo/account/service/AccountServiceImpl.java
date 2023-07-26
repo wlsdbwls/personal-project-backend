@@ -1,6 +1,8 @@
 package com.example.demo.account.service;
 
 import com.example.demo.account.controller.form.AccountLoginRequestForm;
+import com.example.demo.account.controller.form.AccountReadRequestForm;
+import com.example.demo.account.controller.form.AccountReadResponseForm;
 import com.example.demo.account.entity.Account;
 import com.example.demo.account.entity.AccountRole;
 import com.example.demo.account.entity.Role;
@@ -8,9 +10,12 @@ import com.example.demo.account.entity.RoleType;
 import com.example.demo.account.repository.*;
 import com.example.demo.account.service.request.BusinessAccountRegisterRequest;
 import com.example.demo.account.service.request.NormalAccountRegisterRequest;
+import com.example.demo.review.controller.form.response.ReviewReadResponseForm;
+import com.example.demo.review.entity.Review;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;
@@ -197,7 +202,7 @@ public class AccountServiceImpl implements AccountService{
         msgg += "</div>";
         message.setText(msgg, "utf-8", "html");// 내용, charset 타입, subtype
         // 보내는 사람의 이메일 주소, 보내는 사람 이름
-        message.setFrom(new InternetAddress("wlsdbwls321@naver.com", "GoodJob_Admin"));// 보내는 사람
+        message.setFrom(new InternetAddress("wlsdbwls321@naver.com", "FoodFoot"));// 보내는 사람
 
         return message;
     }
@@ -250,5 +255,18 @@ public class AccountServiceImpl implements AccountService{
 
 
         return ePw; // 메일로 보냈던 인증 코드를 서버로 반환
+    }
+
+    @Override
+    public Account read(AccountReadRequestForm requestForm) {
+        final String userToken = requestForm.getUserToken();
+        final Long accountId = userTokenRepository.findAccountIdByUserToken(userToken);
+
+        Optional <Account> maybeAccount = accountRepository.findById(accountId);
+        if (maybeAccount.isPresent()) {
+            return maybeAccount.get();
+        }
+
+        return null;
     }
 }
