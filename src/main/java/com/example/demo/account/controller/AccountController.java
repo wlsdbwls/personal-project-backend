@@ -1,13 +1,12 @@
 package com.example.demo.account.controller;
 
-import com.example.demo.account.controller.form.*;
-import com.example.demo.account.controller.form.business.BusinessAccountRegisterForm;
-import com.example.demo.account.controller.form.business.BusinessCheckRequestForm;
-import com.example.demo.account.controller.form.normal.NormalAccountRegisterForm;
+import com.example.demo.account.controller.form.modify.AddressModifyForm;
+import com.example.demo.account.controller.form.modify.NicknameModifyForm;
+import com.example.demo.account.controller.form.modify.PasswordModifyForm;
+import com.example.demo.account.controller.form.request.*;
 import com.example.demo.account.entity.Account;
+import com.example.demo.account.entity.RoleType;
 import com.example.demo.account.service.AccountService;
-import com.example.demo.restaurant.controller.form.RestaurantReadResponseForm;
-import com.example.demo.restaurant.controller.form.business.BusinessRestaurantReadResponseForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -105,5 +104,40 @@ public class AccountController {
         log.info("readAccount()");
 
         return accountService.read(requestForm);
+    }
+
+    // 비밀번호 반환
+    @PostMapping("/check-password")
+    public String returnPassword (@RequestBody CheckPasswordRequestForm requestForm) {
+        log.info("returnPassword()");
+
+        return accountService.returnPassword(requestForm);
+    }
+
+    // 닉네임 변경
+    @PutMapping("change-nickname/{id}")
+    public String changeNickname (@PathVariable("id") Long id,
+                                  @RequestBody NicknameModifyForm modifyForm) {
+        log.info("changeNickname()");
+
+        return accountService.modifyNickname(id, modifyForm);
+    }
+
+    // 주소 변경
+    @PutMapping("change-address/{id}")
+    public String changeAddress (@PathVariable("id") Long id,
+                                  @RequestBody AddressModifyForm modifyForm) {
+        log.info("changeAddress()");
+
+        return accountService.modifyAddress(id, modifyForm);
+    }
+
+    // 비밀번호 변경
+    @PutMapping("change-password/{id}")
+    public String changePassword (@PathVariable("id") Long id,
+                                  @RequestBody PasswordModifyForm modifyForm) {
+        log.info("changePassword()");
+
+        return accountService.modifyPassword(id, modifyForm);
     }
 }

@@ -1,8 +1,11 @@
 package com.example.demo.account.service;
 
-import com.example.demo.account.controller.form.AccountLoginRequestForm;
-import com.example.demo.account.controller.form.AccountReadRequestForm;
-import com.example.demo.account.controller.form.AccountReadResponseForm;
+import com.example.demo.account.controller.form.modify.AddressModifyForm;
+import com.example.demo.account.controller.form.modify.PasswordModifyForm;
+import com.example.demo.account.controller.form.request.AccountLoginRequestForm;
+import com.example.demo.account.controller.form.request.AccountReadRequestForm;
+import com.example.demo.account.controller.form.request.CheckPasswordRequestForm;
+import com.example.demo.account.controller.form.modify.NicknameModifyForm;
 import com.example.demo.account.entity.Account;
 import com.example.demo.account.entity.RoleType;
 import com.example.demo.account.service.request.BusinessAccountRegisterRequest;
@@ -27,4 +30,8 @@ public interface AccountService {
     String createKey();
     String sendSimpleMessage(String email) throws MessagingException, UnsupportedEncodingException;
     Account read(AccountReadRequestForm requestForm);
+    String returnPassword(CheckPasswordRequestForm requestForm);
+    String modifyNickname(Long id, NicknameModifyForm modifyForm);
+    String modifyAddress(Long id, AddressModifyForm modifyForm);
+    String modifyPassword(Long id, PasswordModifyForm modifyForm);
 }

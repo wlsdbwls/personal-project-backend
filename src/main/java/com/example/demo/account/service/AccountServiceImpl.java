@@ -1,8 +1,11 @@
 package com.example.demo.account.service;
 
-import com.example.demo.account.controller.form.AccountLoginRequestForm;
-import com.example.demo.account.controller.form.AccountReadRequestForm;
-import com.example.demo.account.controller.form.AccountReadResponseForm;
+import com.example.demo.account.controller.form.modify.AddressModifyForm;
+import com.example.demo.account.controller.form.modify.NicknameModifyForm;
+import com.example.demo.account.controller.form.modify.PasswordModifyForm;
+import com.example.demo.account.controller.form.request.AccountLoginRequestForm;
+import com.example.demo.account.controller.form.request.AccountReadRequestForm;
+import com.example.demo.account.controller.form.request.CheckPasswordRequestForm;
 import com.example.demo.account.entity.Account;
 import com.example.demo.account.entity.AccountRole;
 import com.example.demo.account.entity.Role;
@@ -10,12 +13,9 @@ import com.example.demo.account.entity.RoleType;
 import com.example.demo.account.repository.*;
 import com.example.demo.account.service.request.BusinessAccountRegisterRequest;
 import com.example.demo.account.service.request.NormalAccountRegisterRequest;
-import com.example.demo.review.controller.form.response.ReviewReadResponseForm;
-import com.example.demo.review.entity.Review;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;
@@ -23,9 +23,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Random;
-
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 import static com.example.demo.account.entity.RoleType.BUSINESS;
@@ -268,5 +267,71 @@ public class AccountServiceImpl implements AccountService{
         }
 
         return null;
+    }
+
+    @Override
+    public String returnPassword(CheckPasswordRequestForm requestForm) {
+
+        final String email = requestForm.getEmail();
+        Optional<Account> maybeAccount = accountRepository.findByEmail(email);
+
+        if (maybeAccount.isPresent()) {
+            final String returnPassword = maybeAccount.get().getPassword();
+
+            return returnPassword;
+        }
+
+        return null;
+    }
+
+    @Override
+    public String modifyNickname(Long id, NicknameModifyForm modifyForm) {
+        Optional<Account> maybeAccount = accountRepository.findById(id);
+
+        if (maybeAccount.isEmpty()) {
+            log.info("존재하지 않는 회원입니다.");
+            return null;
+        }
+
+        Account account = maybeAccount.get();
+        account.setNickName(modifyForm.getNickName());
+
+        accountRepository.save(account);
+
+        return modifyForm.getNickName();
+    }
+
+    @Override
+    public String modifyAddress(Long id, AddressModifyForm modifyForm) {
+        Optional<Account> maybeAccount = accountRepository.findById(id);
+
+        if (maybeAccount.isEmpty()) {
+            log.info("존재하지 않는 회원입니다.");
+            return null;
+        }
+
+        Account account = maybeAccount.get();
+        account.setAddress(modifyForm.getAddress());
+
+        accountRepository.save(account);
+
+        return modifyForm.getAddress();
+    }
+
+    @Override
+    public String modifyPassword(Long id, PasswordModifyForm modifyForm) {
+        Optional<Account> maybeAccount = accountRepository.findById(id);
+
+        if (maybeAccount.isEmpty()) {
+            log.info("존재하지 않는 회원입니다.");
+            return null;
+        }
+
+        Account account = maybeAccount.get();
+        account.setPassword(modifyForm.getPassword());
+
+        accountRepository.save(account);
+
+        return modifyForm.getPassword();
     }
 }
