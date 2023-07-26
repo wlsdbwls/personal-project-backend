@@ -334,10 +334,34 @@ public class AccountServiceImpl implements AccountService{
 
         return modifyForm.getPassword();
     }
-    
+
     @Override
     public void delete(Long id) {
         accountRoleRepository.deleteAllByAccountId(id);
         accountRepository.deleteById(id);
+    }
+
+    @Override
+    public String returnNickname(Long id) {
+
+        Optional<Account> maybeAccount = accountRepository.findById(id);
+        if (maybeAccount.isPresent()) {
+            return maybeAccount.get().getNickName();
+        }
+
+        return null;
+    }
+
+    @Override
+    public RoleType returnRoleType(Long id) {
+
+        Optional<Account> maybeAccount = accountRepository.findById(id);
+        if (maybeAccount.isPresent()) {
+            RoleType roleType = accountRoleRepository.findRoleByAccount(maybeAccount.get()).getRoleType();
+
+            return roleType;
+        }
+
+        return null;
     }
 }

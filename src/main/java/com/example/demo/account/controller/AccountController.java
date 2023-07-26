@@ -148,4 +148,20 @@ public class AccountController {
 
         accountService.delete(id);
     }
+
+    // 닉네임 반환
+    @GetMapping("/return-nickname/{id}")
+    public String returnNickname (@PathVariable("id") Long id) {
+        log.info("returnNickname()");
+
+        return accountService.returnNickname(id);
+    }
+
+    // 회원 유형 반환
+    @GetMapping("/return-roleType/{id}")
+    public RoleType returnRoleType (@PathVariable("id") Long id) {
+        log.info("returnRoleType()");
+
+        return accountService.returnRoleType(id);
+    }
 }

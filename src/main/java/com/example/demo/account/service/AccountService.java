@@ -35,4 +35,6 @@ public interface AccountService {
     String modifyAddress(Long id, AddressModifyForm modifyForm);
     String modifyPassword(Long id, PasswordModifyForm modifyForm);
     void delete(Long id);
+    String returnNickname(Long id);
+    RoleType returnRoleType(Long id);
 }
