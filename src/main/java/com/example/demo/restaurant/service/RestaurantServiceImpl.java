@@ -86,6 +86,10 @@ public class RestaurantServiceImpl implements RestaurantService {
                 BusinessRestaurantListResponseForm responseForm = new BusinessRestaurantListResponseForm(
                         restaurant, maybeImages.get(0).getImageResourcePath());
                 businessRegisterRestaurantList.add(responseForm);
+            } else {
+                businessRegisterRestaurantList.add(new BusinessRestaurantListResponseForm(
+                        restaurant, ""
+                        ));
             }
         }
         return businessRegisterRestaurantList;
@@ -136,6 +140,9 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public void delete(Long id) {
+        menuRepository.deleteByRestaurantId(id);
+        restaurantFoodRepository.deleteByRestaurantId(id);
+
         restaurantImagesRepository.deleteAllByRestaurantId(id);
         restaurantRepository.deleteById(id);
     }
