@@ -43,15 +43,15 @@ public class RestaurantServiceImpl implements RestaurantService {
     public List<RestaurantListResponseForm> list() {
         List<RestaurantListResponseForm> tmpList = new ArrayList<>();
         List<Restaurant> restaurants = restaurantRepository.findAll();
-
         for (Restaurant restaurant : restaurants) {
             List<RestaurantImages> maybeImages = restaurantImagesRepository.findByRestaurantId(restaurant.getId());
             if (!maybeImages.isEmpty()) {
                 RestaurantListResponseForm responseForm = new RestaurantListResponseForm(restaurant, maybeImages.get(0).getImageResourcePath());
                 tmpList.add(responseForm);
+            } else {
+                tmpList.add(new  RestaurantListResponseForm(restaurant, ""));
             }
         }
-
         return tmpList;
     }
 
