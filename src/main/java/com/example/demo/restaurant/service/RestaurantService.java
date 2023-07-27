@@ -21,5 +21,5 @@ public interface RestaurantService {
     void delete(Long id);
     Boolean register(RestaurantRegisterRequest restaurantRegisterRequest, List<String> imageUrls);
     Restaurant modify(Long id, RestaurantModifyForm modifyForm);
-    Long findRestaurantId(String restaurantName);
+    Integer returnVisitor(Long id);
 }

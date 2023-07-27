@@ -11,6 +11,7 @@ import com.example.demo.restaurant.entity.RestaurantImages;
 import com.example.demo.restaurant.repository.RestaurantRepository;
 import com.example.demo.review.controller.form.ReviewModifyForm;
 import com.example.demo.review.controller.form.request.ReviewAverageRatingsForm;
+import com.example.demo.review.controller.form.request.ReviewListRequestForm;
 import com.example.demo.review.controller.form.response.ReviewListResponseForm;
 import com.example.demo.review.controller.form.response.ReviewReadResponseForm;
 import com.example.demo.review.entity.Review;
@@ -64,22 +65,6 @@ public class ReviewServiceImpl implements ReviewService {
         }
 
         return false;
-    }
-
-    @Override
-    public List<ReviewListResponseForm> list(Long restaurantId) {
-        List<ReviewListResponseForm> tmpList = new ArrayList<>();
-        List<Review> reviews = reviewRepository.findAllByRestaurantId(restaurantId);
-
-        for (Review review : reviews) {
-//            List<RestaurantImages> maybeImages = restaurantImagesRepository.findByRestaurantId(restaurant.getId());
-//            if (!maybeImages.isEmpty()) {
-            ReviewListResponseForm responseForm = new ReviewListResponseForm(review);
-            tmpList.add(responseForm);
-//            }
-        }
-
-        return tmpList;
     }
 
     @Override
@@ -153,5 +138,23 @@ public class ReviewServiceImpl implements ReviewService {
         }
 
         return null;
+    }
+
+    @Override
+    public List<ReviewListResponseForm> list(ReviewListRequestForm requestForm) {
+
+        final Long restaurantId = requestForm.getRestaurantId();
+        List<ReviewListResponseForm> tmpList = new ArrayList<>();
+        List<Review> reviews = reviewRepository.findAllByRestaurantId(restaurantId);
+
+        for (Review review : reviews) {
+//            List<RestaurantImages> maybeImages = restaurantImagesRepository.findByRestaurantId(restaurant.getId());
+//            if (!maybeImages.isEmpty()) {
+            ReviewListResponseForm responseForm = new ReviewListResponseForm(review);
+            tmpList.add(responseForm);
+//            }
+        }
+
+        return tmpList;
     }
 }

@@ -128,14 +128,22 @@ public class RestaurantServiceImpl implements RestaurantService {
         return restaurantRepository.save(restaurant);
     }
 
+//    @Override
+//    public Long findRestaurantId(String restaurantName) {
+//        final Optional<Restaurant> maybeRestaurant = restaurantRepository.findByRestaurantName(restaurantName);
+//        if (maybeRestaurant.isPresent()) {
+//            return maybeRestaurant.get().getId();
+//        } else {
+//            return null;
+//        }
+//    }
+
     @Override
-    public Long findRestaurantId(String restaurantName) {
-        final Optional<Restaurant> maybeRestaurant = restaurantRepository.findByRestaurantName(restaurantName);
-        if (maybeRestaurant.isPresent()) {
-            return maybeRestaurant.get().getId();
-        } else {
-            return null;
-        }
+    public Integer returnVisitor(Long id) {
+
+
+
+        return null;
     }
 
     @Override
