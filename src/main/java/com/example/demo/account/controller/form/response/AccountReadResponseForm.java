@@ -1,4 +1,4 @@
-package com.example.demo.account.controller.form;
+package com.example.demo.account.controller.form.response;
 
 import com.example.demo.account.entity.Account;
 import com.example.demo.review.entity.Review;
