@@ -12,11 +12,11 @@ public class RestaurantFood {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "food_Id")
+    @JoinColumn(name = "food_Id", nullable = false)
     private Food food;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "restaurant_Id")
+    @JoinColumn(name = "restaurant_Id", nullable = false)
     private Restaurant restaurant;
 
     public RestaurantFood(Food food, Restaurant restaurant) {

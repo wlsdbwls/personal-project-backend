@@ -34,7 +34,7 @@ public class Restaurant {
 
     private String restaurantAddress;
     private Integer restaurantNumber;
-    private Integer restaurantTime;
+    private String restaurantTime;
 
     @JsonIgnore
     @JsonManagedReference
@@ -46,9 +46,12 @@ public class Restaurant {
     @Setter
     private Account account;
 
-    public Restaurant(String restaurantName, String restaurantInfo) {
+    public Restaurant(String restaurantName, String restaurantInfo, String restaurantAddress, Integer restaurantNumber, String restaurantTime) {
         this.restaurantName = restaurantName;
         this.restaurantInfo = restaurantInfo;
+        this.restaurantAddress = restaurantAddress;
+        this.restaurantNumber = restaurantNumber;
+        this.restaurantTime = restaurantTime;
     }
 
     public void setRestaurantImages(RestaurantImages restaurantImg) {

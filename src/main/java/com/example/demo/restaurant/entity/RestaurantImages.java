@@ -22,7 +22,7 @@ public class RestaurantImages {
     @Setter
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restaurant_id")
+    @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 
     public RestaurantImages(String imageResourcePath) {

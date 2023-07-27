@@ -2,25 +2,28 @@ package com.example.demo.restaurant.service;
 
 import com.example.demo.account.entity.Account;
 import com.example.demo.account.repository.AccountRepository;
+import com.example.demo.account.repository.AccountRoleRepository;
 import com.example.demo.account.repository.UserTokenRepository;
 import com.example.demo.account.repository.UserTokenRepositoryImpl;
+import com.example.demo.restaurant.controller.form.MenuData;
 import com.example.demo.restaurant.controller.form.RestaurantListResponseForm;
 import com.example.demo.restaurant.controller.form.RestaurantModifyForm;
 import com.example.demo.restaurant.controller.form.RestaurantReadResponseForm;
 import com.example.demo.restaurant.controller.form.business.BusinessRestaurantListResponseForm;
 import com.example.demo.restaurant.controller.form.business.BusinessRestaurantReadResponseForm;
-import com.example.demo.restaurant.entity.Restaurant;
-import com.example.demo.restaurant.entity.RestaurantImages;
-import com.example.demo.restaurant.repository.RestaurantImagesRepository;
-import com.example.demo.restaurant.repository.RestaurantRepository;
+import com.example.demo.restaurant.entity.*;
+import com.example.demo.restaurant.repository.*;
 import com.example.demo.restaurant.service.request.RestaurantRegisterRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.example.demo.account.entity.RoleType.BUSINESS;
 
 @Slf4j
 @Service
@@ -31,6 +34,10 @@ public class RestaurantServiceImpl implements RestaurantService {
     final private RestaurantImagesRepository restaurantImagesRepository;
     final private UserTokenRepository userTokenRepository = UserTokenRepositoryImpl.getInstance();
     final private AccountRepository accountRepository;
+    final private AccountRoleRepository accountRoleRepository;
+    final private MenuRepository menuRepository;
+    final private FoodRepository foodRepository;
+    final private RestaurantFoodRepository restaurantFoodRepository;
 
     @Override
     public List<RestaurantListResponseForm> list() {
@@ -51,6 +58,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public RestaurantReadResponseForm read(Long id) {
+
         final Optional<Restaurant> maybeRestaurant = restaurantRepository.findById(id);
 
         if (maybeRestaurant.isEmpty()) {
@@ -130,37 +138,56 @@ public class RestaurantServiceImpl implements RestaurantService {
     public void delete(Long id) {
         restaurantImagesRepository.deleteAllByRestaurantId(id);
         restaurantRepository.deleteById(id);
-
     }
 
     @Override
+    @Transactional
     public Boolean register(RestaurantRegisterRequest request, List<String> restaurantImageUrls) {
+
         String userToken = request.getUserToken();
         Long accountId = userTokenRepository.findAccountIdByUserToken(userToken);
+        log.info("accountId: " + accountId);
         Optional<Account> maybeAccount = accountRepository.findById(accountId);
 
-        if (maybeAccount.isPresent()) {
-            Account account = maybeAccount.get();
-
-            Restaurant restaurant = request.toRestaurant();
-            restaurant.setAccount(account);
-            restaurantRepository.save(restaurant); // 레스토랑 엔티티 저장
-
-            final List<RestaurantImages> restaurantImagesList = new ArrayList<>();
-
-            for (String imageUrl : restaurantImageUrls) {
-                RestaurantImages restaurantImage = new RestaurantImages(imageUrl);
-                restaurantImage.setRestaurant(restaurant); // 레스토랑 엔티티와의 관계 설정
-                restaurantImagesList.add(restaurantImage);
-            }
-
-            restaurantImagesRepository.saveAll(restaurantImagesList); // 레스토랑 이미지 엔티티들 저장
-
-            return true;
+        if (maybeAccount.isEmpty()) {
+            return false;
         }
 
-        return false;
+        Account account = maybeAccount.get();
+        boolean isBusinessAccount = accountRoleRepository.findRoleByAccount(account).getRoleType() == BUSINESS;
+        if (!isBusinessAccount) {
+            return false;
+        }
+
+        Restaurant restaurant = request.toRestaurant();
+        restaurant.setAccount(account);
+        restaurantRepository.save(restaurant); // 레스토랑 엔티티 저장
+
+        // 메뉴 담아주기
+        List<MenuData> menus = request.getMenus();
+        for (MenuData menuData : menus) {
+            Menu menu = new Menu(menuData.getMenuItem(), menuData.getMenuPrice());
+            menu.setRestaurant(restaurant);
+            menuRepository.save(menu);
+        }
+
+        final List<RestaurantImages> restaurantImagesList = new ArrayList<>();
+
+        for (String imageUrl : restaurantImageUrls) {
+            RestaurantImages restaurantImage = new RestaurantImages(imageUrl);
+            restaurantImage.setRestaurant(restaurant); // 레스토랑 엔티티와의 관계 설정
+            restaurantImagesList.add(restaurantImage);
+        }
+
+        restaurantImagesRepository.saveAll(restaurantImagesList); // 레스토랑 이미지 엔티티들 저장
+
+        Optional<Food> maybeFood = foodRepository.findByFoodType(request.getFoodType());
+        if (maybeFood.isPresent()) {
+            final Food food = maybeFood.get();
+            final RestaurantFood restaurantFood = new RestaurantFood(food, restaurant);
+            restaurantFoodRepository.save(restaurantFood);
+        }
+
+        return true;
     }
-
-
 }
