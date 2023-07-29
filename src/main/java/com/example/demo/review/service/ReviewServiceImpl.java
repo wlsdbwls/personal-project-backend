@@ -43,11 +43,10 @@ public class ReviewServiceImpl implements ReviewService {
         Long accountId = userTokenRepository.findAccountIdByUserToken(userToken);
         Optional<Account> maybeAccount = accountRepository.findById(accountId);
 
-
         if (maybeAccount.isPresent()) {
             Account account = maybeAccount.get();
 
-            Optional<Restaurant> maybeRestaurant = restaurantRepository.findByRestaurantName(request.getRestaurantName());
+            Optional<Restaurant> maybeRestaurant = restaurantRepository.findById(request.getRestaurantId());
             if (maybeRestaurant.isPresent()) {
 
                 Restaurant restaurant = maybeRestaurant.get();
@@ -103,14 +102,14 @@ public class ReviewServiceImpl implements ReviewService {
             log.info("후기가 존재하지 않습니다.");
             return null;
         }
+
         final Review review = maybeReview.get();
         log.info("review:" + review);
 
-//        final List<RestaurantImages> restaurantImagesList = restaurantImagesRepository.findByRestaurantId(review.getId());
-//        log.info("restaurantImagesList: " + restaurantImagesList);
-
+        // 생성자 호출 시 accountId 값을 전달
         return new ReviewReadResponseForm(review);
     }
+
 
     @Override
     public void delete(Long id) {
