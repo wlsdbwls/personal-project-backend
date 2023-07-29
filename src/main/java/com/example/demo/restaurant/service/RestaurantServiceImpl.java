@@ -5,12 +5,8 @@ import com.example.demo.account.repository.AccountRepository;
 import com.example.demo.account.repository.AccountRoleRepository;
 import com.example.demo.account.repository.UserTokenRepository;
 import com.example.demo.account.repository.UserTokenRepositoryImpl;
-import com.example.demo.restaurant.controller.form.MenuData;
-import com.example.demo.restaurant.controller.form.RestaurantListResponseForm;
-import com.example.demo.restaurant.controller.form.RestaurantModifyForm;
-import com.example.demo.restaurant.controller.form.RestaurantReadResponseForm;
+import com.example.demo.restaurant.controller.form.*;
 import com.example.demo.restaurant.controller.form.business.BusinessRestaurantListResponseForm;
-import com.example.demo.restaurant.controller.form.business.BusinessRestaurantReadResponseForm;
 import com.example.demo.restaurant.entity.*;
 import com.example.demo.restaurant.repository.*;
 import com.example.demo.restaurant.service.request.RestaurantRegisterRequest;
@@ -55,7 +51,6 @@ public class RestaurantServiceImpl implements RestaurantService {
         return tmpList;
     }
 
-
     @Override
     public RestaurantReadResponseForm read(Long id) {
 
@@ -65,13 +60,30 @@ public class RestaurantServiceImpl implements RestaurantService {
             log.info("존재하지 않는 맛집입니다.");
             return null;
         }
+
         final Restaurant restaurant = maybeRestaurant.get();
         log.info("restaurant:" + restaurant);
 
         final List<RestaurantImages> restaurantImagesList = restaurantImagesRepository.findByRestaurantId(restaurant.getId());
         log.info("restaurantImagesList: " + restaurantImagesList);
 
-        return new RestaurantReadResponseForm(restaurant, restaurantImagesList);
+        final Optional<Menu> maybeMenu = menuRepository.findByRestaurantId(restaurant.getId());
+        if (maybeMenu.isEmpty()) {
+            return null;
+        }
+
+        final Menu menu = maybeMenu.get();
+        log.info("menu: " + menu);
+
+        final Optional<RestaurantFood> maybeRestaurantFood = restaurantFoodRepository.findByRestaurantId(restaurant.getId());
+        if (maybeRestaurantFood.isEmpty()) {
+            return null;
+        }
+
+        final RestaurantFood restaurantFood = maybeRestaurantFood.get();
+        log.info("restaurantFood: " + restaurantFood);
+
+        return new RestaurantReadResponseForm(restaurant, restaurantImagesList, menu , restaurantFood);
     }
 
     @Override
@@ -96,24 +108,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public BusinessRestaurantReadResponseForm businessRead(Long id) {
-        final Optional<Restaurant> maybeRestaurant = restaurantRepository.findById(id);
-
-        if (maybeRestaurant.isEmpty()) {
-            log.info("존재하지 않는 맛집입니다.");
-            return null;
-        }
-        final Restaurant restaurant = maybeRestaurant.get();
-        log.info("restaurant:" + restaurant);
-
-        final List<RestaurantImages> restaurantImagesList = restaurantImagesRepository.findByRestaurantId(restaurant.getId());
-        log.info("productImagesList: " + restaurantImagesList);
-
-        return new BusinessRestaurantReadResponseForm(restaurant, restaurantImagesList);
-    }
-
-    @Override
-    public Restaurant modify(Long id, RestaurantModifyForm modifyForm) {
+    public RestaurantModifyResponseForm modify(Long id, RestaurantModifyForm modifyForm) {
         Optional<Restaurant> maybeRestaurant = restaurantRepository.findById(id);
 
         if (maybeRestaurant.isEmpty()) {
@@ -124,19 +119,58 @@ public class RestaurantServiceImpl implements RestaurantService {
         Restaurant restaurant = maybeRestaurant.get();
         restaurant.setRestaurantName(modifyForm.getRestaurantName());
         restaurant.setRestaurantInfo(modifyForm.getRestaurantInfo());
+        restaurant.setRestaurantAddress(modifyForm.getRestaurantAddress());
+        restaurant.setRestaurantNumber(modifyForm.getRestaurantNumber());
+        restaurant.setRestaurantTime(modifyForm.getRestaurantTime());
 
-        return restaurantRepository.save(restaurant);
+        restaurantRepository.save(restaurant);
+
+        final List<RestaurantImages> restaurantImagesList = new ArrayList<>();
+
+        for (String imageUrl : modifyForm.getImageUrls()) {
+            RestaurantImages restaurantImage = new RestaurantImages(imageUrl);
+            restaurantImage.setRestaurant(restaurant); // 레스토랑 엔티티와의 관계 설정
+            restaurantImagesList.add(restaurantImage);
+        }
+
+        restaurantImagesRepository.saveAll(restaurantImagesList);
+
+        final Optional<Menu> maybeMenu = menuRepository.findByRestaurantId(restaurant.getId());
+        if (maybeMenu.isEmpty()) {
+            return null;
+        }
+
+        Menu menu = maybeMenu.get();
+        menu.setMenuItem(modifyForm.getMenuItem());
+        menu.setMenuPrice(modifyForm.getMenuPrice());
+
+        menuRepository.save(menu);
+
+        final Optional<Food> maybeFood = foodRepository.findByFoodType(modifyForm.getFoodType());
+        if (maybeFood.isEmpty()) {
+            return null;
+        }
+
+        Food food = maybeFood.get();
+        food.setFoodType(modifyForm.getFoodType());
+        final RestaurantFood restaurantFood = new RestaurantFood(food, restaurant);
+        restaurantFoodRepository.save(restaurantFood);
+
+        return new RestaurantModifyResponseForm(restaurant, restaurantImagesList, menu, restaurantFood);
     }
 
-//    @Override
-//    public Long findRestaurantId(String restaurantName) {
-//        final Optional<Restaurant> maybeRestaurant = restaurantRepository.findByRestaurantName(restaurantName);
-//        if (maybeRestaurant.isPresent()) {
-//            return maybeRestaurant.get().getId();
-//        } else {
-//            return null;
-//        }
-//    }
+    @Override
+    public String returnName(Long id) {
+
+        Optional<Restaurant> maybeRestaurant = restaurantRepository.findById(id);
+        if (maybeRestaurant.isEmpty()) {
+            return null;
+        }
+
+        String restaurantName = maybeRestaurant.get().getRestaurantName();
+
+        return restaurantName;
+    }
 
     @Override
     public Integer returnVisitor(Long id) {
