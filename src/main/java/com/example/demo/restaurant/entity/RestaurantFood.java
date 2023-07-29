@@ -1,10 +1,14 @@
 package com.example.demo.restaurant.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @NoArgsConstructor
+@ToString
 public class RestaurantFood {
 
     @Id
@@ -13,6 +17,8 @@ public class RestaurantFood {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "food_Id", nullable = false)
+    @Getter
+    @Setter
     private Food food;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

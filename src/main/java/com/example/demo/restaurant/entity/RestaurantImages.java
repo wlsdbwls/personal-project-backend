@@ -17,6 +17,7 @@ public class RestaurantImages {
     private Long id;
 
     @Getter
+    @Setter
     private String imageResourcePath;
 
     @Setter

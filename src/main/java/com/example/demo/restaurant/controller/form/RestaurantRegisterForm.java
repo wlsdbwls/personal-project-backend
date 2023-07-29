@@ -1,5 +1,6 @@
 package com.example.demo.restaurant.controller.form;
 
+import com.example.demo.account.entity.Role;
 import com.example.demo.restaurant.entity.FoodType;
 import com.example.demo.restaurant.entity.Restaurant;
 import com.example.demo.restaurant.service.request.RestaurantRegisterRequest;

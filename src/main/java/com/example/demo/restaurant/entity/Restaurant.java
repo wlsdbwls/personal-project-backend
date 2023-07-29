@@ -25,20 +25,20 @@ public class Restaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Setter
     private String restaurantName;
-
     @Setter
     private String restaurantInfo;
-
+    @Setter
     private String restaurantAddress;
+    @Setter
     private Integer restaurantNumber;
+    @Setter
     private String restaurantTime;
-
     @JsonIgnore
     @JsonManagedReference
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
+    @Setter
     private List<RestaurantImages> restaurantImagesList = new ArrayList<>();
 
     @ManyToOne
