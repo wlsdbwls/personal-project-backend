@@ -39,6 +39,14 @@ public class AccountController {
         return accountService.checkEmailDuplication(email);
     }
 
+    // 사업자번호 중복체크
+    @GetMapping("/check-businessNumber/{businessNumber}")
+    public Boolean checkBusinessNumber (@PathVariable("businessNumber") String businessNumber) {
+        log.info("checkBusinessNumber: " + businessNumber);
+
+        return accountService.checkBusinessNumberDuplication(businessNumber);
+    }
+
     // 로그인
     @PostMapping("/login")
     public String accountLogin (@RequestBody AccountLoginRequestForm accountLoginRequestForm){

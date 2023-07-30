@@ -364,4 +364,15 @@ public class AccountServiceImpl implements AccountService{
 
         return null;
     }
+
+    @Override
+    public Boolean checkBusinessNumberDuplication(String businessNumber) {
+
+        final Optional<AccountRole> maybeAccountRole = accountRoleRepository.findByBusinessNumber(businessNumber);
+        if (maybeAccountRole.isPresent()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

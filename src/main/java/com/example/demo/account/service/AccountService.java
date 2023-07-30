@@ -37,4 +37,5 @@ public interface AccountService {
     void delete(Long id);
     String returnNickname(Long id);
     RoleType returnRoleType(Long id);
+    Boolean checkBusinessNumberDuplication(String businessNumber);
 }
