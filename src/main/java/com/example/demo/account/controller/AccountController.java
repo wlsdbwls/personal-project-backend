@@ -47,6 +47,14 @@ public class AccountController {
         return accountService.checkBusinessNumberDuplication(businessNumber);
     }
 
+    // 닉네임 중복체크
+    @GetMapping("/check-nickname/{nickName}")
+    public Boolean checkNickName (@PathVariable("nickName") String nickName) {
+        log.info("checkNickName: " + nickName);
+
+        return accountService.checkNickNameDuplication(nickName);
+    }
+
     // 로그인
     @PostMapping("/login")
     public String accountLogin (@RequestBody AccountLoginRequestForm accountLoginRequestForm){

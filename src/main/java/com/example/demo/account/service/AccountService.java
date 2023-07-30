@@ -38,4 +38,5 @@ public interface AccountService {
     String returnNickname(Long id);
     RoleType returnRoleType(Long id);
     Boolean checkBusinessNumberDuplication(String businessNumber);
+    Boolean checkNickNameDuplication(String nickName);
 }

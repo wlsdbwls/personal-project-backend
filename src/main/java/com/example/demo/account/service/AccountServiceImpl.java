@@ -375,4 +375,15 @@ public class AccountServiceImpl implements AccountService{
             return true;
         }
     }
+
+    @Override
+    public Boolean checkNickNameDuplication(String nickName) {
+        Optional<Account> maybeAccount = accountRepository.findByNickName(nickName);
+
+        if (maybeAccount.isPresent()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
